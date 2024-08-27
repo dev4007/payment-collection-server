@@ -34,7 +34,6 @@ export const loginUser = async (email: string, password: string) => {
   if (!isPasswordValid) {
     throw new Error('Invalid email or password');
   }
-
   // Generate a token
   const token = jwt.sign(
     { id: user._id, email: user.email, role: user.role },
