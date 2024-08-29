@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/auth';
+import userRoutes from './routes/user';
 import collectedDataRoutes from './routes/collectedData';
 
 import connectToMongoDB from './config/config';
@@ -16,6 +17,7 @@ app.use(express.json());
 connectToMongoDB();
 
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.use('/collected-data', collectedDataRoutes);
 app.use('/report', collectedDataRoutes);
 

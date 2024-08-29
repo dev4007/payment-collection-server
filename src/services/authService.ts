@@ -1,6 +1,7 @@
 import User, { IUser } from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 // Register a new user (Salesman or Customer)
 export const registerUser = async (userData: IUser) => {
@@ -31,6 +32,8 @@ export const loginUser = async (email: string, password: string) => {
 
   // Compare the provided password with the stored hashed password
   const isPasswordValid = await bcrypt.compare(password, user.password);
+
+
   if (!isPasswordValid) {
     throw new Error('Invalid email or password');
   }
@@ -43,3 +46,28 @@ export const loginUser = async (email: string, password: string) => {
 
   return { token, user };
 };
+
+
+
+export const sendEmail = async (to: string, password: string) => {
+    // Create a transporter object
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',  // Use your email service
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    // Email options
+    const mailOptions = {
+        from: 'your-email@example.com',
+        to,
+        subject: 'Your New Account Password',
+        text: `Your password is: ${password}. Please use this to log in.`,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+};
+
